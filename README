@@ -1,0 +1,16 @@
+济群门店连锁管理
+By:Tammy
+技术栈:
+Java: Amazon Corretto 21.0.5.11
+Springboot:3.3.4
+ORM: SpringDataJpa
+Security: 未定
+工程说明:
+项目基于springboot3.3.4 java21 开发。需要同步订单，故此借助java21虚拟线程来处理工单浪费线程资源问题
+鉴权暂定采用SpringSecurity JWT。
+以下是一些约定:
+1. 日志打印只能采用 logger 或者其他日志工具输出，非单元测试严禁用 System.out.println 输出日志
+2. 组件注入一律采用构造器注入，避免依赖循环且组件唯一性。本项目采用的是 @RequiredArgsConstructor 生成构造器注入
+3. 版本约定 eg: v1.0.0b1 1.0.0 属常规版本更新，b是beta 后面的数字代表该beta版本更新次数
+4. 数据库中 oracle数据库ddl 更新模式只能是 none 避免出现表出现故障
+5. 此外 pom.xml版本设置以git log 提交版本为准

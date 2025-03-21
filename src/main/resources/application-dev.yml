@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: Jq_Server
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  datasource:
+    primary:
+      url: jdbc:postgresql://43.136.32.212:5432/bestfarmer
+      username: postgres
+      password: 7307913.5t5t
+      driver-class-name: org.postgresql.Driver
+    secondary:
+      url: jdbc:postgresql://43.136.32.212:5432/apijson
+      username: postgres
+      password: 7307913.5t5t
+      driver-class-name: org.postgresql.Driver
+  jackson:
+    time-zone: Asia/Shanghai
+server:
+  port: 80
+  shutdown: graceful
+
