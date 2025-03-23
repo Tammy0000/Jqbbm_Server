@@ -41,4 +41,16 @@ public class AppConfig {
     public String getSecondaryClassName() {
         return env.getProperty("spring.datasource.secondary.driver-class-name");
     }
+
+    public String getJwtSecret() {
+        return env.getProperty("Jwt.secret");
+    }
+
+    public String getJwtExpiration() {
+        return env.getProperty("Jwt.expire");
+    }
+
+    public String getJwtIssuer() {
+        return env.getProperty("Jwt.issuer");
+    }
 }
