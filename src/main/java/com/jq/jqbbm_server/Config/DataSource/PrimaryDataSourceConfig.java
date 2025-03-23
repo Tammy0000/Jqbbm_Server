@@ -1,7 +1,9 @@
-package com.jq.jqbbm_server.Config;
+package com.jq.jqbbm_server.Config.DataSource;
 
+import com.jq.jqbbm_server.Config.AppConfig;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,49 +21,51 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.jq.jqbbm_server.Dao.Secondary",
-        entityManagerFactoryRef = "secondaryEntityManagerFactory",
-        transactionManagerRef = "secondaryTransactionManager"
+        basePackages = "com.jq.jqbbm_server.Dao.Primary",
+        entityManagerFactoryRef = "primaryEntityManagerFactory",
+        transactionManagerRef = "primaryTransactionManager"
 )
+@Slf4j
 @RequiredArgsConstructor
-public class SecondaryDataSourceConfig {
+public class PrimaryDataSourceConfig {
 
-    private final appConfig appconfig;
+    private final AppConfig appconfig;
 
-    @Bean(name = "secondaryDataSource")
-    public DataSource secondaryDataSource() {
-        return DataSourceBuilder.create()
-                .url(appconfig.getSecondaryUrl()) // 手动设置 URL
-                .username(appconfig.getSecondaryUser()) // 手动设置用户名
-                .password(appconfig.getSecondaryPassword()) // 手动设置密码
-                .driverClassName(appconfig.getSecondaryClassName()) // 手动设置驱动类
+    @Bean(name = "primaryDataSource")
+    public DataSource primaryDataSource() {
+        DataSource dataSource = DataSourceBuilder.create()
+                .url(appconfig.getPrimaryUrl()) // 手动设置 URL
+                .username(appconfig.getPrimaryUser()) // 手动设置用户名
+                .password(appconfig.getPrimaryPassword()) // 手动设置密码
+                .driverClassName(appconfig.getPrimaryClassName()) // 手动设置驱动类
                 .build();
+        log.info("PrimaryDataSourceConfig: {}", dataSource.toString());
+        return dataSource;
     }
 
-    @Bean(name = "secondaryEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory(
-            @Qualifier("secondaryDataSource") DataSource dataSource) {
+    @Bean(name = "primaryEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
+            @Qualifier("primaryDataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan("com.jq.jqbbm_server.Dao.Secondary");
+        em.setPackagesToScan("com.jq.jqbbm_server.Entity.Primary");
         //设置方言
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
 
         //JPA配置
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.hbm2ddl.auto", "none");
         properties.setProperty("hibernate.show_sql", "true");
 
         em.setJpaVendorAdapter(adapter);
         em.setJpaProperties(properties);
-
         return em;
     }
 
-    @Bean(name = "secondaryTransactionManager")
-    public PlatformTransactionManager secondaryTransactionManager(
-            @Qualifier("secondaryEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+    @Bean(name = "primaryTransactionManager")
+    public PlatformTransactionManager primaryTransactionManager(
+            @Qualifier("primaryEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

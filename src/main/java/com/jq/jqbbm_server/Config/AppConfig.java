@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class appConfig {
-    private final Environment env;
+public class AppConfig {
 
+    private final Environment env;
 
     public String getPrimaryUrl() {
         return env.getProperty("spring.datasource.primary.url");
