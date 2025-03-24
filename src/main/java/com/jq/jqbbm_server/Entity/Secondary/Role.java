@@ -5,48 +5,37 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
-@Table(name = "jq_sys_user")
+/**
+ * @author Tammy
+ * @date 2025/3/24 下午4:19
+ */
 @Entity
 @Getter
 @Setter
-//链式调用
 @Accessors(chain = true)
-public class User {
+@Table(name = "jq_sys_role")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private BigInteger id;
 
     /**
-     * 用户名
+     * 角色名称
      */
-    private String username;
+    private String roleName;
 
     /**
-     * 密码
+     * 描述
      */
-    private String password;
+    private String description;
 
     /**
-     * 部门
+     * 角色Id
      */
-    private String dept;
-
-    /**
-     * 电话
-     */
-    private String phone;
-
-    /**
-     * 店铺
-     */
-    private Integer StoreId;
-
-    /**
-     * 所在区域
-     */
-    private String area;
+    private Integer roleId;
 
     /**
      * 创建时间
@@ -55,12 +44,7 @@ public class User {
     private LocalDateTime createTime;
 
     /**
-     * 是否禁止登录
+     * 是否禁用
      */
     private Boolean isForbidden;
-
-    /**
-     * 角色ID
-     */
-    private Integer roleId;
 }

@@ -1,15 +1,17 @@
 package com.jq.jqbbm_server.Controller.User;
 
-import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson2.JSONObject;
-import com.jq.jqbbm_server.Entity.Secondary.User;
+import com.jq.jqbbm_server.Config.Security.UserContext;
+import com.jq.jqbbm_server.Server.AuthService;
 import com.jq.jqbbm_server.Server.UserAccess;
+import com.jq.jqbbm_server.Utils.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,24 +22,30 @@ public class UserController {
 
     private final UserAccess userAccess;
 
-    @GetMapping("/test")
-    SaResult test(@RequestParam String pwd){
-        return SaResult.ok().setData(bCrypt.encode(pwd));
+    private final AuthService authService;
+
+    @PostMapping("/login")
+    public Result login(@RequestBody String data) {
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        String username = jsonObject.getString("username");
+        String password = jsonObject.getString("password");
+        var code = userAccess.login(username, password);
+        var Msg = switch (code) {
+            case -1 -> "用户名不存在!";
+            case -2 -> "密码错误!";
+            default -> "登录成功";
+        };
+        return code == 0 ? Result.ok().setMsg(Msg) : Result.error().setMsg(Msg);
     }
 
-    @PostMapping("/register")
-    SaResult register(@RequestBody String body){
-        JSONObject json = JSONObject.parseObject(body);
-        String password = json.getString("password");
-        String username = json.getString("username");
-        String phone = json.getString("phone");
-        User user = new User()
-                .setPhone(phone)
-                .setUsername(username)
-                .setPassword(bCrypt.encode(password))
-                .setCreateTime(LocalDateTime.now())
-                .setIsForbidden(false)
-                .setDept("IT部");
-        return SaResult.ok().setData(userAccess.register(user) == 0 ? "successful" : "fail");
+    @GetMapping("/test")
+    public Result test() {
+        log.info(SecurityContextHolder.getContext().getAuthentication().getName());
+        return Result.ok();
+    }
+
+    @PostMapping("/test/2")
+    public String test2() {
+        return "successful";
     }
 }

@@ -2,7 +2,6 @@ package com.jq.jqbbm_server.Dao.Secondary;
 
 import com.jq.jqbbm_server.Entity.Secondary.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author Tammy
@@ -17,5 +16,5 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     Boolean existsByPhone(String phone);
 
-    long deleteByPhone(String phone);
+    void deleteByPhone(String phone);
 }
