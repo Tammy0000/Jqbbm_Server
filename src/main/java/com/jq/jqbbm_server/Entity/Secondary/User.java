@@ -16,42 +16,48 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     /**
      * 用户名
      */
+    @Column(name = "UserName")
     private String username;
 
     /**
      * 密码
      */
+    @Column(name = "Password")
     private String password;
 
     /**
-     * 部门
+     * 岗位
      */
-    private String dept;
+    @Column(name = "Post")
+    private String post;
 
     /**
      * 电话
      */
+    @Column(name = "Phone")
     private String phone;
 
     /**
      * 店铺
      */
+    @Column(name = "Store_Id")
     private Integer StoreId;
 
     /**
      * 所在区域
      */
+    @Column(name = "Area")
     private String area;
 
     /**
      * 创建时间
      */
-    @Column(columnDefinition = "timestamp(0) without time zone")
+    @Column(columnDefinition = "timestamp(0) without time zone", name = "Create_Date")
     private LocalDateTime createTime;
 
     /**
@@ -62,5 +68,12 @@ public class User {
     /**
      * 角色ID
      */
+    @Column(name = "Role_Id")
     private Integer roleId;
+
+    /**
+     * 用户ID
+     */
+    @Column(name = "User_Id")
+    private Integer userId;
 }
