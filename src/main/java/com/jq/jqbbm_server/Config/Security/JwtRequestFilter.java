@@ -1,6 +1,7 @@
 package com.jq.jqbbm_server.Config.Security;
 
 import com.jq.jqbbm_server.Server.AuthService;
+import com.jq.jqbbm_server.Utils.Result;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,6 +47,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         String username = authService.getUsername(header);
         UserDetails user = userDetail.loadUserByUsername(username);
+
+        log.info("用户是否禁用:{}", user.isEnabled());
+
+        //以下是测试代码，可以删除
+        if(!user.isEnabled()){
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 设置 HTTP 状态码为 403 Forbidden
+            response.setContentType("application/json"); // 设置响应类型为 JSON
+            response.setCharacterEncoding("UTF-8"); // 设置字符编码为 UTF-8
+
+            // 创建自定义的错误信息
+            String jsonResponse = Result.error().setCode(403).setMsg("你的账号已禁止使用,请联系管理员!").toString();
+
+            // 写入响应体
+            response.getWriter().write(jsonResponse);
+            return;
+        }
 
         //注入到自带的SecurityContextHolder中
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

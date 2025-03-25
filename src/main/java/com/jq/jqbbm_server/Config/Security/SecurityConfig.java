@@ -33,8 +33,9 @@ public class SecurityConfig {
                 authorizeHttpRequests(
                         //Todo 路径设置
                         authorize -> authorize
-                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/login/**").permitAll()
                                 .requestMatchers("/test/**").permitAll()
+                                .requestMatchers("/user/**").hasAuthority("admin")
                                 //默认所有请求都拒绝
                                 .anyRequest().denyAll()
                 );

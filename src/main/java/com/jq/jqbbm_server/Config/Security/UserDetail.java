@@ -16,6 +16,7 @@ public class UserDetail implements UserDetailsService {
         return User.withUsername("admin")
                 .password("112233")
                 .authorities("admin")
+                .disabled(true)
                 .build();
     }
 }
