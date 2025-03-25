@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.redis.core.RedisHash;
 
-import java.math.BigInteger;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author Tammy
@@ -44,7 +44,7 @@ public class Role {
      * 创建时间
      */
     @Column(columnDefinition = "timestamp(0) without time zone", name = "Create_Date")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 是否禁用
@@ -57,4 +57,14 @@ public class Role {
      */
     @Column(name = "Role_Path")
     private String path;
+
+    /**
+     * 更新时间
+     */
+    @Column(columnDefinition = "timestamp(0) without time zone", name = "Update_Date")
+    private Date updateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "Role_Id")
+    private User user;
 }

@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "jq_sys_user")
 @Entity
@@ -68,7 +70,7 @@ public class User {
     /**
      * 角色ID
      */
-    @Column(name = "Role_Id")
+    @Column(name = "Role_Id", unique = true)
     private Integer roleId;
 
     /**
@@ -76,4 +78,7 @@ public class User {
      */
     @Column(name = "User_Id")
     private Integer userId;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Role> roles;
 }

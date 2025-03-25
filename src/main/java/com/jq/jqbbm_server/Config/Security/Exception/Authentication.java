@@ -22,8 +22,12 @@ public class Authentication implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         //获取错误响应状态码
         var code = response.getStatus();
-        var msg = code == 401 ? "未登录或者Token过期! by:Tammy" : code == 404 ? "路径不存在! by:Tammy" : "其他错误,请反馈! by:Tammy";
-
+        var msg = switch (code) {
+            case 401 -> "未登录或者Token过期! by:Tammy";
+            case 500 -> "参数有误,请检查参数! by:Tammy";
+            case 404 -> "路径不存在! by:Tammy";
+            default -> "Internal Server Error";
+        };
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();

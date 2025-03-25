@@ -1,7 +1,12 @@
 package com.jq.jqbbm_server.Dao.Secondary;
 
 import com.jq.jqbbm_server.Entity.Secondary.User;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
  * @author Tammy
@@ -9,12 +14,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface UserRepo extends JpaRepository<User, Integer> {
 
-    @Override
-    void deleteById(Integer Id);
-
+    @Cacheable(value = "commonCache", key = "'user-view-' + #phone")
     User findByPhone(String phone);
 
+    @Cacheable(value = "commonCache", key = "'user-exit-' + #phone")
     Boolean existsByPhone(String phone);
 
+    @CacheEvict(value = "commonCache", key = "'user-view-' + #phone")
     void deleteByPhone(String phone);
+
+    @Query(value ="select role_path from jq_sys_user, jq_sys_role where jq_sys_user.role_id = ?1", nativeQuery = true)
+    @Cacheable(value = "commonCache", key = "'role-pathList-' + #roleId")
+    List<String> findByRoleId(Integer roleId);
 }

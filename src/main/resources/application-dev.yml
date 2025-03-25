@@ -29,6 +29,8 @@ spring:
           min-idle: 5
           max-active: 200
       timeout: 10000
+  cache:
+    type: redis
 server:
   port: 80
   shutdown: graceful
