@@ -4,10 +4,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.jq.jqbbm_server.Config.AppConfig;
+import com.jq.jqbbm_server.Dao.Secondary.JwtValidRepo;
+import com.jq.jqbbm_server.Entity.Secondary.JwtToken;
 import com.jq.jqbbm_server.Server.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -22,6 +25,8 @@ import java.util.Objects;
 public class AuthJwt implements AuthService {
 
     private final AppConfig appConfig;
+
+    private final JwtValidRepo jwtValidRepo;
 
     @Override
     public String createToken(String username) {
@@ -53,5 +58,23 @@ public class AuthJwt implements AuthService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        return !jwtValidRepo.existsByToken(token);
+    }
+
+    @Override
+    public void removeTokenFromDb(String token) {
+        jwtValidRepo.deleteByToken(token);
+    }
+
+    @Override
+    public void saveTokenToDb(String token) {
+        JwtToken jwtToken = new JwtToken()
+                .setToken(token)
+                .setCreateTime(LocalDateTime.now());
+        jwtValidRepo.save(jwtToken);
     }
 }

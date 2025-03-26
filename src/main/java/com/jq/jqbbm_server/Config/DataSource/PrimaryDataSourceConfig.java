@@ -51,7 +51,7 @@ public class PrimaryDataSourceConfig {
         em.setPackagesToScan("com.jq.jqbbm_server.Entity.Primary");
         //设置方言
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-        adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+        adapter.setDatabasePlatform("org.hibernate.dialect.OracleDialect");
 
         //JPA配置
         Properties properties = new Properties();

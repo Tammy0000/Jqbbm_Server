@@ -7,10 +7,10 @@ spring:
       max-request-size: 1024MB
   datasource:
     primary:
-      url: jdbc:postgresql://43.136.32.212:5432/bestfarmer
-      username: postgres
-      password: 7307913.5t5t
-      driver-class-name: org.postgresql.Driver
+      url: jdbc:oracle:thin:@192.168.0.168:1521:orcl
+      username: gdjqyy
+      password: gdjqyy
+      driver-class-name: oracle.jdbc.driver.OracleDriver
     secondary:
       url: jdbc:postgresql://43.136.32.212:5432/apijson
       username: postgres

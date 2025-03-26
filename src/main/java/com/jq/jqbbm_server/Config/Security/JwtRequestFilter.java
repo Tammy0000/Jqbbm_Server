@@ -40,17 +40,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
-        if (Objects.isNull(header) || !authService.verifyToken(header)) {
+        String token = request.getHeader("Authorization");
+        if (Objects.isNull(token) || !authService.verifyToken(token)) {
             response.sendError(401, "token无效" );
             return;
         }
-        String username = authService.getUsername(header);
+        String username = authService.getUsername(token);
         UserDetails user = userDetail.loadUserByUsername(username);
 
         log.info("用户是否禁用:{}", user.isEnabled());
 
-        //以下是测试代码，可以删除
+        //以下是判断用户是否被禁用,禁用不代表token无效
         if(!user.isEnabled()){
             response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 设置 HTTP 状态码为 403 Forbidden
             response.setContentType("application/json"); // 设置响应类型为 JSON
@@ -63,6 +63,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             response.getWriter().write(jsonResponse);
             return;
         }
+
+        //检查Token是否在黑名单，如果在则重新生成Token,避免泄露
+        if (authService.isTokenValid(token)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 设置 HTTP 状态码为 403 Forbidden
+            response.setContentType("application/json"); // 设置响应类型为 JSON
+            response.setCharacterEncoding("UTF-8"); // 设置字符编码为 UTF-8
+
+            // 创建自定义的错误信息
+            String jsonResponse = Result.error().setCode(403).setMsg("token已失效,请重新登录").toString();
+
+            // 写入响应体
+            response.getWriter().write(jsonResponse);
+            return;
+        }
+
+        /*
+        解决Jwt Token泄露问题，当Token泄露后，系统或者用户从后台重新更新Token，那么之前的Token就需要做一个黑名单处理，防止使用原有 token进行访问
+         */
+
 
         //注入到自带的SecurityContextHolder中
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -81,6 +100,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/login") || path.startsWith("/test");
+        return path.startsWith("/login") || path.startsWith("/test") || path.startsWith("/register");
     }
 }

@@ -28,4 +28,25 @@ public interface AuthService {
      * @return 解码后的token
      */
     public Object getDecodeToken(String token);
+
+    /**
+     * 判断token是否在黑名单 <br> 这个方法主要是匹配该token是否在数据库中存在 <br> 如果存在则该token无效 <br> 如果不存在则该token有效
+     * @param token 需要判断的token
+     * @return true or false
+     */
+    default boolean isTokenValid(String token) {
+        return false;
+    }
+
+    /**
+     * 保存需要被封禁token到数据库
+     * @param token 需要被封禁的token
+     */
+    default void saveTokenToDb(String token) {}
+
+    /**
+     * 删除数据库中保存的token
+     * @param token 需要被删除的token
+     */
+    default void removeTokenFromDb(String token) {}
 }
