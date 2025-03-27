@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Table(name = "jq_sys_user")
@@ -60,7 +61,7 @@ public class User {
      * 创建时间
      */
     @Column(columnDefinition = "timestamp(0) without time zone", name = "Create_Date")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 是否禁止登录

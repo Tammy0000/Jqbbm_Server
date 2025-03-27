@@ -14,10 +14,9 @@ import java.util.List;
  */
 public interface UserRepo extends JpaRepository<User, Integer> {
 
-    @Cacheable(value = "cache30", key = "'user-view-' + #phone")
+//    @Cacheable(value = "cache30", key = "'user-view-' + #phone")
     User findByPhone(String phone);
 
-    @Cacheable(value = "cache30", key = "'user-exit-' + #phone")
     Boolean existsByPhone(String phone);
 
     @CacheEvict(value = "cache30", key = "'user-view-' + #phone")
