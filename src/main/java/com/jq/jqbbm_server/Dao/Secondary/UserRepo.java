@@ -14,16 +14,16 @@ import java.util.List;
  */
 public interface UserRepo extends JpaRepository<User, Integer> {
 
-    @Cacheable(value = "commonCache", key = "'user-view-' + #phone")
+    @Cacheable(value = "cache30", key = "'user-view-' + #phone")
     User findByPhone(String phone);
 
-    @Cacheable(value = "commonCache", key = "'user-exit-' + #phone")
+    @Cacheable(value = "cache30", key = "'user-exit-' + #phone")
     Boolean existsByPhone(String phone);
 
-    @CacheEvict(value = "commonCache", key = "'user-view-' + #phone")
+    @CacheEvict(value = "cache30", key = "'user-view-' + #phone")
     void deleteByPhone(String phone);
 
     @Query(value ="select role_path from jq_sys_user, jq_sys_role where jq_sys_user.role_id = ?1", nativeQuery = true)
-    @Cacheable(value = "commonCache", key = "'role-pathList-' + #roleId")
+    @Cacheable(value = "cache30", key = "'role-pathList-' + #roleId")
     List<String> findByRoleId(Integer roleId);
 }

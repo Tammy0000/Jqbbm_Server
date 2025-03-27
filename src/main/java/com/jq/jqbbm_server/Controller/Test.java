@@ -1,5 +1,6 @@
 package com.jq.jqbbm_server.Controller;
 
+import com.jq.jqbbm_server.Dao.Primary.BmsStQtyLstVRepo;
 import com.jq.jqbbm_server.Dao.Secondary.RoleRepo;
 import com.jq.jqbbm_server.Dao.Secondary.UserRepo;
 import com.jq.jqbbm_server.Server.Security.AuthJwt;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -25,13 +27,15 @@ public class Test {
 
     private final AuthJwt  authJwt;
 
+    private final BmsStQtyLstVRepo bmsStQtyLstVRepo;
+
     @GetMapping("/login/test")
     public Result test() {
         return Result.ok().setData(authJwt.createToken("admin"));
     }
 
-    @GetMapping("/user/2")
+    @GetMapping("/test/kf")
     public Result test2() {
-        return Result.ok();
+        return Result.ok().setMsg("保管账ID查询库存").setData(bmsStQtyLstVRepo.findSumByStorerid(12L).setScale(2, RoundingMode.HALF_UP));
     }
 }

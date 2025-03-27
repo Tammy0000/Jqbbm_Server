@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -19,9 +21,6 @@ public class BmsStQtyLstVTest {
 
     @Test
     public void test() {
-        List<BmsStQtyLstV> byLotno = bmsStQtyLstVRepo.findByLotno("23080008");
-        byLotno.forEach(ex -> {
-            System.out.println(ex.getGoodsname());
-        });
+        System.out.println(bmsStQtyLstVRepo.findSumByStorerid(12L).setScale(2, RoundingMode.HALF_UP));
     }
 }

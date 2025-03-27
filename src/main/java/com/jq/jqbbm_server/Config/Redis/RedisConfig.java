@@ -41,12 +41,12 @@ public class RedisConfig {
         RedisCacheConfiguration rareCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofMinutes(10)); // 10 分钟后过期
+                .entryTtl(Duration.ofMinutes(30)); // 10 分钟后过期
 
         // 创建 RedisCacheManager，应用不同的缓存配置
         return RedisCacheManager.builder(connectionFactory)
-                .withCacheConfiguration("commonCache", commonCacheConfig) // 常用缓存，永不过期
-                .withCacheConfiguration("rareCache", rareCacheConfig) // 不常用缓存，10分钟后过期
+                .withCacheConfiguration("cache0", commonCacheConfig) // 常用缓存，永不过期
+                .withCacheConfiguration("cache30", rareCacheConfig) // 不常用缓存，10分钟后过期
                 .cacheDefaults(defaultCacheConfig) // 默认缓存配置
                 .build();
     }

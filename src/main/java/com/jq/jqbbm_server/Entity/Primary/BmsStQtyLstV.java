@@ -203,8 +203,8 @@ public class BmsStQtyLstV {
     @Column(name = "UNITPRICE", precision = 20, scale = 2)
     private BigDecimal unitprice;
 
-    @Column(name = "BATCHMONEY")
-    private Long batchmoney;
+    @Column(name = "BATCHMONEY", scale = 2)
+    private BigDecimal batchmoney;
 
     @Column(name = "CREDATE")
     private LocalDate credate;
