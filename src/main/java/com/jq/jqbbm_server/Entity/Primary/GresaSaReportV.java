@@ -12,6 +12,7 @@ import java.time.LocalDate;
  * Mapping for DB view
  * @author Tammy
  * @Date 2025年3月26日14:19:13
+ * @Description 零售决策分析
  */
 @Getter
 @Setter

@@ -16,7 +16,30 @@ import java.util.List;
 public interface BmsStQtyLstVRepo extends JpaRepository<BmsStQtyLstV, Long> {
     List<BmsStQtyLstV> findByLotno(String lotno);
 
+    /**
+     * 获取门店库存金额
+     * @param storerid 门店id
+      * @return 门店库存金额
+     */
     @Cacheable(value = "cache30", key = "'BmsStQtyLstVRepo-findSumByStorerid-' + #storerid")
     @Query("select sum(b.batchmoney) from BmsStQtyLstV b where b.storageid = ?1")
     BigDecimal findSumByStorerid(Long storerid);
+
+    /**
+     * 获取门店库存品规数
+     * @param storerid 门店id
+     * @return 门店库存数量
+     */
+    @Cacheable(value = "cache30", key = "'BmsStQtyLstVRepo-findSumGoodsidByStorerid-' + #storerid")
+    @Query("select count(distinct b.goodsid) from BmsStQtyLstV b where b.storageid = ?1")
+    int findSumGoodsidByStorerid(Long storerid);
+
+    /**
+     * 获取门店库存品规
+     * @param storerid 门店id
+     * @return 门店库存品规
+     */
+    @Query("select distinct b.goodsid from BmsStQtyLstV b where b.storageid = ?1")
+    @Cacheable(value = "cache30", key = "'BmsStQtyLstVRepo-findGoodsidByGoodsid-' + #storerid")
+    List<Long> findByGoodsid(Long storerid);
 }

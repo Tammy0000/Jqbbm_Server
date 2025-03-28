@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * @author Tammy
  * @date 2025/3/26 下午2:50
@@ -16,5 +19,6 @@ public class GresaSaReportVTest {
 
     @Test
     public void test() {
+        System.out.println(gsaSaReportVRepo.findGoodsNameByPlacePointId(43L, 30));
     }
 }

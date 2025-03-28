@@ -22,7 +22,7 @@ public class ProductManagementController {
 
     private final BmsStQtyLstVRepo bmsStQtyLstVRepo;
 
-    @GetMapping("/test/store/view/getBmsStQtyLstVBatchMoney/{id}")
+    @GetMapping("/public/store/view/getBmsStQtyLstVBatchMoney/{id}")
     Result getBmsStQtyLstVBatchMoney(@PathVariable int id) {
         BigDecimal batchMoney = bmsStQtyLstVRepo.findSumByStorerid((long) id).setScale(2, RoundingMode.HALF_UP);
         return Result.ok().setMsg("获取门店库存金额").setData(batchMoney);

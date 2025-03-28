@@ -1,7 +1,9 @@
 package com.jq.jqbbm_server.Entity;
 
 import com.jq.jqbbm_server.Dao.Primary.BmsStQtyLstVRepo;
+import com.jq.jqbbm_server.Dao.Primary.GresaSaReportVRepo;
 import com.jq.jqbbm_server.Entity.Primary.BmsStQtyLstV;
+import com.jq.jqbbm_server.Utils.ListComparison;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +21,14 @@ public class BmsStQtyLstVTest {
     @Autowired
     BmsStQtyLstVRepo bmsStQtyLstVRepo;
 
+    @Autowired
+    GresaSaReportVRepo gresaSaReportVRepo;
+
     @Test
     public void test() {
-        System.out.println(bmsStQtyLstVRepo.findSumByStorerid(12L).setScale(2, RoundingMode.HALF_UP));
+//        List<Long> byGoodsid = bmsStQtyLstVRepo.findByGoodsid(3L);
+        List<Long> pointId = gresaSaReportVRepo.findGoodsNameByPlacePointId(43L, 30);
+//        List<Long> differentElements = ListComparison.getDifferentElements(byGoodsid, pointId);
+        System.out.println(pointId.size());
     }
 }
